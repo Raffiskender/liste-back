@@ -1,0 +1,50 @@
+# COMPOSER
+/vendor
+
+
+# WORDPRESS - 
+
+# Core
+#
+# you can delete this whole section/until Configuration.
+/wordpress/wp-admin/
+/wordpress/wp-includes/
+/wordpress/index.php
+/wordpress/license.txt
+/wordpress/readme.html
+/wordpress/wp-*.php
+/wordpress/xmlrpc.php
+
+# Configuration
+/wordpress/wp-config.php
+!/wordpress/wp-config-sample.php
+# Example themes
+/wordpress/wp-content/themes/twenty*/
+
+# Example plugin
+/wordpress/wp-content/plugins/hello.php
+
+# Uploads
+/wordpress/wp-content/uploads/
+
+# Log files
+*.log
+
+# htaccess
+!/wordpress/.htaccess
+
+# All plugins
+#
+# Note: If you wish to whitelist plugins,
+# uncomment the next line
+/wordpress/wp-content/plugins/*
+!/wordpress/wp-content/plugins/ListeDeCourse
+
+
+
+# All themes
+#
+# Note: If you wish to whitelist themes,
+# uncomment the next line
+/wp-content/themes
+

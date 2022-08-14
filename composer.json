@@ -1,0 +1,5 @@
+{
+    "require": {
+        "roots/wordpress": "^6.0"
+    }
+}
