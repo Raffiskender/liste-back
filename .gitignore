@@ -33,18 +33,13 @@
 # htaccess
 !/wordpress/.htaccess
 
-# All plugins
-#
-# Note: If you wish to whitelist plugins,
-# uncomment the next line
-/wordpress/wp-content/plugins/*
+# Plugins
+
+/wordpress/wp-content/plugins/
 !/wordpress/wp-content/plugins/ListeDeCourse
 
-
+/wordpress/wp-content/plugins/ListeDeCourse/vendor-ListeDeCourse/
 
 # All themes
-#
-# Note: If you wish to whitelist themes,
-# uncomment the next line
 /wp-content/themes
 
