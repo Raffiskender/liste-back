@@ -3,6 +3,7 @@
 namespace Liste_de_course;
 
 use Liste_de_course\CPT\ListElement;
+use Taxonomy\Category;
 
 class Plugin{
 	// Construction du plugin
@@ -18,6 +19,7 @@ class Plugin{
 	{
 		//Création des CPT au hook init
 		ListElement::register();
+		Category::register();
 	}
 	
 	public function onActivation()
@@ -28,5 +30,6 @@ class Plugin{
 	public function onDeactivation()
 	{
 		ListElement::unregister();
+		Category::unregister();
 	}
 }

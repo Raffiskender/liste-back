@@ -1,0 +1,1 @@
+/var/www/html/Projets_Vue/ListeDeCouseBackend/wordpress/wp-content/plugins/query-monitor/wp-content/db.php
