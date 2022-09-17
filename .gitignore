@@ -35,15 +35,18 @@
 
 # Plugins
 
-/wordpress/wp-content/plugins/
+!/wordpress/wp-content/plugins/
+/wordpress/wp-content/plugins/*
 !/wordpress/wp-content/plugins/liste-de-course
+/wordpress/wp-content/plugins/liste-de-course/vendor-liste-de-course
 
-/wordpress/wp-content/plugins/ListeDeCourse/vendor-liste-de-course
-
-/wordpress/wp-content/plugins/jwt-authentication-for-wp-rest-api
+#JWT : adding customer ID in login's return.
+!/wordpress/wp-content/plugins/jwt-authentication-for-wp-rest-api/
+/wordpress/wp-content/plugins/jwt-authentication-for-wp-rest-api/*
 !/wordpress/wp-content/plugins/jwt-authentication-for-wp-rest-api/public/
-/wordpress/wp-content/plugins/jwt-authentication-for-wp-rest-api/public/
+/wordpress/wp-content/plugins/jwt-authentication-for-wp-rest-api/public/*
 !/wordpress/wp-content/plugins/jwt-authentication-for-wp-rest-api/public/class-jwt-auth-public.php
+
 
 # All themes
 /wp-content/themes
