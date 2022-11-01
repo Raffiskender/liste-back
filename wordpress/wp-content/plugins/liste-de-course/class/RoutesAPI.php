@@ -3,14 +3,24 @@
 namespace Liste_de_course;
 
 use Liste_de_course\Models\Correspondance;
+use Liste_de_course\Users\UserConfirme;
 
 class RoutesAPI
 {
 	public static function create_API_routes(){
 		//* Les routes en GET
 		$correspondance = new Correspondance;
+		$userConfirm = new UserConfirme;
 		
-
+		//* ROUTES VERIFICATION USERS
+		//* POST
+		register_rest_route( 'liste-de-course/v1', 'confirm', [
+			'methods' => 'POST',
+			'callback' => [$userConfirm, 'confirmeUser'],
+			],
+		);
+		
+		
 		register_rest_route( 'liste-de-course/v1', 'correspondance',[
 			'methods' => 'GET',
 			'callback' => [$correspondance, 'findAll'],

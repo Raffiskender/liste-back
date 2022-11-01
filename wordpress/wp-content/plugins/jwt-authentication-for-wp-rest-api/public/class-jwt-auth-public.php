@@ -160,6 +160,7 @@ class Jwt_Auth_Public
             'user_nicename' => $user->data->user_nicename,
             'user_display_name' => $user->data->display_name,
 						'user_id' => $user->data->ID,
+						'user_confirmed' => get_user_meta($user->data->ID, "confirmed")
 
         );
 

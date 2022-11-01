@@ -2,8 +2,8 @@
 
 namespace Liste_de_course\CPT;
 
-use Liste_de_course\Taxonomy\Rubrique;
-use Liste_de_course\Taxonomy\Urgence;
+// use Liste_de_course\Taxonomy\Rubrique;
+// use Liste_de_course\Taxonomy\Urgence;
 
 class ListElement
 {
