@@ -52,19 +52,26 @@ class UserConfirme
 			wp_mail($mail, 'Merci de confirmer votre e-mail', $message, $headers);
 	}
 	
+	/**
+	 * confirme User Function
+	 * Takes the parametters and compares it with the DB Params.
+	 * @param [array] $params
+	 * @return '1' on success, '0' if failed
+	 */
 	public function confirmeUser($params){
 		$user = $params['user'];
 		$key = $params['key'];
-
-		$currentUser = get_user_by('login', $user);
-
-		$inDBKey = get_user_meta($currentUser->data->ID, 'key');
-				
-		if ($inDBKey[0] == $key) {
-			update_user_meta($currentUser->data->ID, 'confirmed', '1');
-			return '1';
-		}
 		
+		if ($user && $key) {
+			$currentUser = get_user_by('login', $user);
+
+			$inDBKey = get_user_meta($currentUser->data->ID, 'key');
+
+			if ($inDBKey[0] == $key) {
+					update_user_meta($currentUser->data->ID, 'confirmed', '1');
+					return '1';
+			}
+		}
 		return '0';
 	}
 }
