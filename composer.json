@@ -1,5 +1,11 @@
 {
     "require": {
-        "roots/wordpress": "^6.0"
+        "roots/wordpress": "^6.0",
+        "google/apiclient": "^2.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "roots/wordpress-core-installer": true
+        }
     }
 }

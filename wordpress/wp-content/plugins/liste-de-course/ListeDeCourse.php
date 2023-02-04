@@ -5,7 +5,7 @@
  * Plugin Name:  Liste de Course
  * Description:  Création de CPT / taxos pour le site Liste De Course.
  * Version:      1.0.0
- * Author:       JRaffi
+ * Author:       Raffi
  *
  */
 

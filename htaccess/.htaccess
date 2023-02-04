@@ -1,17 +1,27 @@
+# BEGIN WordPress
+# The directives (lines) between "BEGIN WordPress" and "END WordPress" are
+# dynamically generated, and should only be modified via WordPress filters.
+# Any changes to the directives between these markers will be overwritten.
 <IfModule mod_rewrite.c>
 RewriteEngine On
-
 RewriteCond %{SERVER_PORT} !=443
-RewriteRule ^(.*)$ https://listeback.raffiskender.com/$1 [R=301,L]
+RewriteRule ^(.*)$ https://listeback-v2.raffiskender.com/$1 [R=301,L]
 
 RewriteCond %{HTTP:Authorization} ^(.*)
 RewriteRule ^(.*) - [E=HTTP_AUTHORIZATION:%1]
 SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
 
 RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
-RewriteBase /Projets_Vue/ListeDeCouseBackend/wordpress/
+RewriteBase /
 RewriteRule ^index\.php$ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . /Projets_Vue/ListeDeCouseBackend/wordpress/index.php [L]
+RewriteRule . /index.php [L]
+
 </IfModule>
+
+# END WordPress
+
+<ifModule mod_headers.c>
+ Header set Access-Control-Allow-Origin: *
+</ifModule>

@@ -2,9 +2,18 @@
 
 namespace Liste_de_course\Users ;
 
+use Liste_de_course\Models\JsonTable;
+
 class UserConfirme
 {
-	
+  protected $wpdb;
+    
+  public function __construct()
+  {
+    global $wpdb;
+    $this->wpdb = $wpdb;
+  }
+		
 	//*Cette classe permet de gérer l'envoie la réception la vérification et la confirmation du mail d'un nouveau soucris.
 	//* elle se lance dès qu'un nouvl incrit... S'inscit.
 	//TODO
@@ -24,10 +33,11 @@ class UserConfirme
 		self::SendMailToNewUser($userId, $key);
 		
 	}
+  
 	private static function SendMailToNewUser($userId, $key){
 		//*1- retrieve user's mail
 
-			$user = get_userdata($userId);
+			$user = get_user_by('ID', $userId);
 			$mail = $user->get('user_email');
 			$headers = [
 				'Content-Type: text/html; charset=UTF-8',
@@ -38,11 +48,33 @@ class UserConfirme
 			
 			$message = ' 
 			<html>
+				<style>
+					a{
+						display: block;
+						margin: 5px auto;
+						text-align:center;
+						width:10em;
+						text-align:center;
+						padding: 1em 1.5em;
+						border-radius: 0.3em;
+						color: white;
+						background: blueviolet;
+						font-weight: bold;
+						border: none;
+						box-sizing: border-box;
+						transition: 0.2s;
+						text-decoration:none
+					}
+					a:hover{
+      			cursor: pointer;
+						background: #af6eeb;
+    			}
+				</style>
 				<body>
 				<p>Bienvenue sur la liste de course. Pour pouvoir utiliser le site, vous devez confirmer votre mail en cliquant sur le boutton ci-dessous : </p>
 				<p>
-					<a href="https://liste.raffiskender.com/confirmation?user=' . urlencode($user->user_login) . '&key=' . $key . '">
-						confirmer...
+					<a href="https://liste-v2.raffiskender.com/confirmation?user=' . urlencode($user->ID) . '&key=' . $key . '">
+						Confirmer...
 					</a>
 				</p>
 				</body>
@@ -59,17 +91,23 @@ class UserConfirme
 	 * @return '1' on success, '0' if failed
 	 */
 	public function confirmeUser($params){
-		$user = $params['user'];
-		$key = $params['key'];
-		
-		if ($user && $key) {
-			$currentUser = get_user_by('login', $user);
-
-			$inDBKey = get_user_meta($currentUser->data->ID, 'key');
-
+		$userId = $params['user'];
+		$key  = $params['key'];
+    $jsonTable = new JsonTable;
+    
+		if ($userId && $key) {
+			$currentUser = get_user_by('ID', $userId);
+			$inDBKey = get_user_meta($currentUser->ID, 'key');
+      
 			if ($inDBKey[0] == $key) {
-					update_user_meta($currentUser->data->ID, 'confirmed', '1');
-					return '1';
+				update_user_meta($currentUser->ID, 'confirmed', '1');
+        update_user_meta($currentUser->ID, 'key', '', $key);
+      	//* In bonus, We insert the json line of our user.
+				$jsonTable = new JsonTable;
+        if ($jsonTable->initialize($userId) == 1){
+					return '2';
+        }
+  			return '1';
 			}
 		}
 		return '0';

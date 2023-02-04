@@ -6,6 +6,10 @@
     },
     "config": {
         "vendor-dir": "vendor-liste-de-course"
-    }
+    },
+		"require":{
+      "firebase/php-jwt": "^6.3",
+      "guzzlehttp/guzzle": "^7.5"
+		}
 
 }
