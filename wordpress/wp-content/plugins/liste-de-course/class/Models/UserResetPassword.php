@@ -1,11 +1,10 @@
 <?php
 
-namespace Liste_de_course\Users;
+namespace Liste_de_course\Models;
 
 use WP_Error;
-//use WP_User;
 
-class UserResetPassword
+class UserResetPassword extends CoreModel
 {
 	public static function sendResetLink($params)
 	{
@@ -67,9 +66,12 @@ class UserResetPassword
       			cursor: pointer;
 						background: #af6eeb;
     			}
+          p{
+            text-align:center;
+          }
 				</style>
 				<body>
-				<p>BOnjour, vous avez demandé la réinitialisation de votre mot de passe. Pour ce faire rendez-vous sur la page en cliquant sur le lien ci-dessous</p>
+				<p>Bonjour, vous avez demandé la réinitialisation de votre mot de passe. Pour ce faire rendez-vous sur la page en cliquant sur le lien ci-dessous</p>
 				<p>
 					<a href="https://liste-v2.raffiskender.com/passwordChange?user=' . $user->ID . '&key=' . $key . '">
 						Réinitialiser
@@ -101,11 +103,54 @@ class UserResetPassword
           update_user_meta($currentUser->ID, 'key', '');
           return '1';
         }
-        else return 'Token expiré. Redemandez la réinitialisation de votre mot de passe.';
+        else return 'Clé expiré. Redemandez la réinitialisation de votre mot de passe.';
       }
-      else return 'Token invalide. Redemandez la réinitialisation de votre mot de passe.';
+      else return 'Clé invalide. Redemandez la réinitialisation de votre mot de passe.';
     }
 		return '0';
+  }
+  
+  public function setNewPasswordFromProfilPage($params){
+    $currentPassword   = $params['currentPassword'];
+    $newPassword       = $params['newPassword'];  
+    $userIdFromRequest = $params['userId'];  
+    
+    
+    $tokenValidation = $this->validate_token();
+    if (!is_wp_error($tokenValidation))
+		{
+      if ($userIdFromRequest == $tokenValidation['data']['user']) {   
+        $currentUser = get_user_by('ID', $userIdFromRequest);
+        
+        if ($currentPassword && $newPassword){
+          //return ($currentPassword->_value);
+          if (wp_check_password($currentPassword, $currentUser->user_pass, $userIdFromRequest)) {
+            //*Ajouter des vérifications sur le mot de passe...
+            wp_set_password( $newPassword, $userIdFromRequest );
+            return '1';
+          }
+          else return new WP_Error(
+            'invalid_password',
+            'Password is wrong',
+            array(
+              'status' => 403,
+              'message' => "Vous n'avez pas entré le bon mot de passe"
+            )
+          );;
+        }
+        else return 'Requête incomplête';
+        return '0';
+      }
+      else return new WP_Error(
+        'jwt_invalid_user',
+        'Authorization header doesn\'t matches user.',
+        array(
+          'status' => 403,
+          'message' => "Vous ne pouvez pas modifier cet utilisateur"
+        )
+      );
+    }
+    return $tokenValidation;
   }
   
 }

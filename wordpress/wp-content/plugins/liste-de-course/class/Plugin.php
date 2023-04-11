@@ -3,7 +3,7 @@
 namespace Liste_de_course;
 
 use Liste_de_course\Models\JsonTable;
-use Liste_de_course\Users\UserConfirme;
+use Liste_de_course\Models\UserConfirme;
 
 class Plugin{
 	

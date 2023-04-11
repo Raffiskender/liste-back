@@ -1,11 +1,11 @@
 <?php
 
-namespace Liste_de_course\Users;
+namespace Liste_de_course\Models;
 
 use WP_Error;
 use Liste_de_course\Models\JsonTable;
 
-class User
+class User extends CoreModel
 {
 	public static function onCreate($params)
 	{
@@ -33,9 +33,37 @@ class User
 		
     //return $response;
 	}
+  
   public static function onDelete($id){
     $jsonTable = new JsonTable;
     $jsonTable->deleteUserJsonData($id);
   }
   
+  public function deleteUser(){
+    $tokenValidation = $this->validate_token();
+    
+    if (!is_wp_error($tokenValidation))
+		{
+      $userIdFromToken = $tokenValidation['data']['user'];
+      require_once(ABSPATH . 'wp-admin/includes/user.php');
+      wp_delete_user($userIdFromToken);
+      return "1";
+    }
+    else return $tokenValidation;
+    
+  }
+  public function changeLastName($params){
+    $lastName = $params['lastName'];
+    $tokenValidation = $this->validate_token();
+    
+    if (!is_wp_error($tokenValidation)){
+      wp_update_user([
+        'ID' => $tokenValidation['data']['user'],
+        'display_name' => $lastName,
+      ]);
+      return '1';
+    }
+    else return $tokenValidation;
+    
+  }
 }

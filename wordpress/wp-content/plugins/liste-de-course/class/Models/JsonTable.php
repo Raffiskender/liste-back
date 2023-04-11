@@ -59,7 +59,7 @@ class JsonTable extends CoreModel
 	{
     $data = [
       'user_id' => $userId,
-      'json'    => self::encrypt("[\"vide\"]", $userId),
+      'json'    => self::encrypt("[{\"id\":1,\"tabName\":\"liste\",\"selected\":true,\"content\":[\"vide\"]}]", $userId),
     ];
   
 	return $this->wpdb->insert(self::TABLE_NAME, $data);
@@ -88,15 +88,79 @@ class JsonTable extends CoreModel
       //$jsonData = self::findByUser($userIdFromRequest);
       //2-
 			//Let Encryprt the json :
-			$json = $params['json'];
-			$json = self::encrypt($params['json'], $userIdFromToken);
-			//return $json;	
-			$data = [
-		 	'json' => $json
-			];
       
-			return $this->wpdb->update(self::TABLE_NAME, $data, ["user_id" => $userIdFromToken]);
-			
+      
+        $json = $params['json'];
+        $jsonArray = json_decode($json);
+        
+        //* Let do some verifications :
+        
+        //* 1st - Are we trying to delete tab Nb 1 ?
+        if ($jsonArray[0]->id == 1){
+          $selected = 0;
+          foreach($jsonArray as $index){
+            //* 2nd Is a line of tab > to 25 caracteres
+            if (strlen($index -> tabName) > 25){
+              return  new WP_Error(
+                'Invalid JSON',
+                'Tab name too long...',
+                array(
+                  'status' => 403,
+                  'message' => "Le nom de l'onglet ne doit pas dépasser 25 charactères"
+                )
+              );
+            }
+            //*3rd is there more than 1 tab selected
+            if($index->selected == true && $selected == 1){
+              $index->selected = false;
+            }
+            
+            //* 4th is there a line with more than 75 caracteres...
+            foreach($index -> content as $content){
+              if (strlen($content -> content) > 75){
+                return  new WP_Error(
+                  'Invalid JSON',
+                  'Line too long...',
+                  array(
+                    'status' => 403,
+                    'message' => "une ligne ne doit pas dépasser 75 charactères"
+                  )
+                );
+              }
+            }
+            $selected = $index -> selected == true ? 1 : $selected;
+          }
+          //* 5th- Is there more than 15 tabs...
+        if (count($jsonArray) > 15){
+          return new WP_Error(
+            'Invalid JSON',
+            'Too much tabs...',
+            array(
+              'status' => 403,
+              'message' => "Vous ne pouvez pas créer plus de 15 onglets"
+            )
+          );
+        }
+         
+         //return $jsonArray;
+          
+          $json = self::encrypt(json_encode($jsonArray), $userIdFromToken);
+          //return $json;	
+          $data = [
+          'json' => $json
+          ];
+          return $this->wpdb->update(self::TABLE_NAME, $data, ["user_id" => $userIdFromToken]);
+        }
+        else{
+          return new WP_Error(
+            'Invalid JSON',
+            'Id 1 can\'t be delete',
+            array(
+              'status' => 403,
+              'message' => "vous ne pouvez pas supprimer l'onglet n°1 ! !"
+            )
+          );       
+        }
     	} else {
         return new WP_Error(
           'jwt_invalid_user',
@@ -111,19 +175,7 @@ class JsonTable extends CoreModel
 		return $tokenValidation;
   }
 	
-	public function addNewCorrespondance($request)
-	{
-		$params = $request->get_params();
-		$data = [
-			'list_element_id'=>$params['listElementId'],
-			'rubrique_id'    =>$params['rubriqueId']
-		];
-	  
-		return $this->wpdb->update();
-	}
-	
-	
-	//* https://www.geeksforgeeks.org/how-to-encrypt-and-decrypt-a-php-string/
+  //* https://www.geeksforgeeks.org/how-to-encrypt-and-decrypt-a-php-string/
 	
 	private static function encrypt($json, $id)
 	{

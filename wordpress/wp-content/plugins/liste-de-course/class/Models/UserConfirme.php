@@ -1,6 +1,6 @@
 <?php
 
-namespace Liste_de_course\Users ;
+namespace Liste_de_course\Models ;
 
 use Liste_de_course\Models\JsonTable;
 
@@ -71,7 +71,7 @@ class UserConfirme
     			}
 				</style>
 				<body>
-				<p>Bienvenue sur la liste de course. Pour pouvoir utiliser le site, vous devez confirmer votre mail en cliquant sur le boutton ci-dessous : </p>
+				<p>Bienvenue sur la liste de course. Pour pouvoir utiliser le site, vous devez confirmer votre mail en cliquant sur le bouton ci-dessous : </p>
 				<p>
 					<a href="https://liste-v2.raffiskender.com/confirmation?user=' . urlencode($user->ID) . '&key=' . $key . '">
 						Confirmer...
@@ -81,7 +81,7 @@ class UserConfirme
 			</html>
 			';
 			
-			wp_mail($mail, 'Merci de confirmer votre e-mail', $message, $headers);
+		wp_mail($mail, 'Merci de confirmer votre e-mail', $message, $headers);
 	}
 	
 	/**

@@ -1,5 +1,5 @@
 <?php
-namespace Liste_de_course\Users;
+namespace Liste_de_course\Models;
 
 class GoogleLogin{
 	

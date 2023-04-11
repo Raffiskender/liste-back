@@ -4,9 +4,9 @@ namespace Liste_de_course;
 
 use Liste_de_course\Login\Google\GoogleLogin;
 use Liste_de_course\Models\JsonTable;
-use Liste_de_course\Users\UserConfirme;
-use Liste_de_course\Users\User;
-use Liste_de_course\Users\UserResetPassword;
+use Liste_de_course\Models\UserConfirme;
+use Liste_de_course\Models\User;
+use Liste_de_course\Models\UserResetPassword;
 
 class RoutesAPI
 {
@@ -16,6 +16,7 @@ class RoutesAPI
 		//* Les routes en GET
 		$jsonTable = new JsonTable;
 		$userConfirm = new UserConfirme;
+    $user = new User;
     $resetPassword = new UserResetPassword;
     $googleLogin = new GoogleLogin;
 		//* ROUTES USERS
@@ -26,6 +27,14 @@ class RoutesAPI
 			'callback' => [User::class, 'onCreate'],
 			],
 		);
+    
+    //* SUPRIMER UN UTILISATEUR
+		register_rest_route( self::ROUTE_NAME, 'delete-user', [
+			'methods' => 'DELETE',
+			'callback' => [$user, 'deleteUser'],
+			],
+		);
+    
 
 		//* ROUTES VERIFICATION USERS
 		//* POST
@@ -48,8 +57,19 @@ class RoutesAPI
 			'callback' => [$resetPassword, 'setNewPassword'],
 			],
 		);
+		register_rest_route( self::ROUTE_NAME, 'resetPasswordFromProfil', [
+			'methods' => 'POST',
+			'callback' => [$resetPassword, 'setNewPasswordFromProfilPage'],
+			],
+		);
     
-		
+		//* MODIFICATION DES NOMS / PRENOMS
+    
+		register_rest_route( self::ROUTE_NAME, 'changeLastName', [
+			'methods' => 'POST',
+			'callback' => [$user, 'changeLastName'],
+			],
+		);
 		// //* ROUTES GOOGLE
 		register_rest_route( self::ROUTE_NAME, 'googleLogin', [
 			'methods' => 'POST',
